@@ -14,20 +14,20 @@ export default class TimePickerButton extends Component {
         });
     }
 
-    // async componentDidUpdate(prevProps){
-    //     if(this.props.defaultItem != prevProps.defaultItem){
-    //         await this.setState({
-    //             date: new Date(this.props.defaultItem),
-    //         })
-    //     }
-    // }
+    async componentDidUpdate(prevProps){
+        if(this.props.defaultItem != prevProps.defaultItem){
+            await this.setState({
+                time: new Date("24 Apr 1999 " + this.props.defaultItem),
+            })
+        }
+    }
 
-    // resetTime=()=>{
-    //     this.setState({
-    //         selectedTime:'',
-    //         time: new Time(),
-    //     })
-    // }
+    resetTime=()=>{
+        this.setState({
+            selectedTime:'',
+            time: new Date(),
+        })
+    }
 
     handleOnChange = (event, selectedTime)=>{
         if(event.type=="set"){

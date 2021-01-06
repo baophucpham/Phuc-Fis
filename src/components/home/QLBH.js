@@ -104,30 +104,7 @@ export default class QlBHScreen extends Component {
     });
   }
 
-  // async componentDidUpdate(prevProps) {
-  //   if (
-  //     (this.props.class.data !== null) &
-  //     (this.props.class.data !== prevProps.class.data)
-  //   ) {
-  //     await this.setState({dataClass: this.props.class.data.data});
-  //   }
-  //   if (
-  //     (this.props.class.error !== null) &
-  //     (this.props.class.error !== prevProps.class.error)
-  //   ) {
-  //     Alert.alert('thông báo', this.props.class.error);
-  //   }
-  //   if (
-  //     (this.props.dataDelete !== null) &
-  //     (this.props.dataDelete !== prevProps.dataDelete)
-  //   ) {
-  //     Snackbar.show({
-  //       text: 'xóa Thành Công !',
-  //       duration: Snackbar.LENGTH_SHORT,
-  //     });
-  //   }
-  // }
-
+  
   componentDidUpdate(prevProps) {
     if (prevProps.class != this.props.class) {
       this.setState({
@@ -367,7 +344,7 @@ const styles = StyleSheet.create({
     shadowOffset: {width: 0, height: 13},
     shadowOpacity: 0.3,
     shadowRadius: 6,
-
+    //paddingBottom:15,
     // android (Android +5.0)
     elevation: 3,
   },

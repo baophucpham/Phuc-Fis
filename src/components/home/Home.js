@@ -156,10 +156,28 @@ export default class Home extends React.Component {
     this.setState({numberItem: this.state.numberItem + 10});
   };
 
-  //   onEditPress=()=>{
-  //     this.props.navigation.navigate('changeKHScreen',item);
-  //     console.log(item)
-  // }
+  dangxuat(){
+    Alert.alert(
+      'Bạn Muốn đăng xuất',
+      'Bạn đã chắc chưa ?',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        {
+          text: 'OK',
+          onPress: () => {
+            this.props.navigation.pop()
+            this.props.navigation.navigate('Login');
+          },
+        },
+      ],
+      {cancelable: true},
+    );
+  }
+
 
   render() {
     const {item} = this.props;
@@ -167,7 +185,7 @@ export default class Home extends React.Component {
       <SafeAreaView>
         <View style={styles.container}>
           <View style={styles.header}>
-            <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
+            <TouchableOpacity onPress={() => this.dangxuat()}>
               <Icon style={styles.chevLeft} name="chevron-left" />
             </TouchableOpacity>
 
@@ -289,6 +307,7 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#FFFFFF',
+    marginBottom:7,
     shadowOffset: {width: 0, height: 13},
     shadowOpacity: 0.3,
     shadowRadius: 6,
@@ -313,13 +332,14 @@ var styles = StyleSheet.create({
   },
   body: {
     //backgroundColor: '#FFFFFF'
+    paddingBottom:80
   },
   viewList: {
     //backgroundColor: '#FFFFFF',
     width: 400,
     paddingLeft: 20,
     paddingTop: 10,
-    marginBottom: 70,
+    marginBottom: 10,
   },
   viewFlatlist: {
     backgroundColor: '#FFFFFF',

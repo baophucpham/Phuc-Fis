@@ -45,6 +45,7 @@ export default class changeBHScreen extends Component {
       dateError: true,
       timeFromError: true,
       timeToError: true,
+      timeFromToError: true,
     };
     this.taoLopHoc = this.taoLopHoc.bind(this);
     this.resetTime = React.createRef();
@@ -125,8 +126,19 @@ export default class changeBHScreen extends Component {
     }
   }
 
+  checkFromToTime(from, to) {
+    var from = new Date(from);
+    var to = new Date(to);
+    if (from > to) {
+      this.setState({timeFromError: false});
+      this.setState({timeToError: false});
+      return false;
+    }
+    return true;
+  }
+
   taoLopHoc() {
-    console.log("aaaa");
+    console.log('aaaa');
     console.log(this.props.course);
     var className = this.state.tenLopHoc.trim();
     console.log(className);
@@ -154,14 +166,14 @@ export default class changeBHScreen extends Component {
       return;
     }
     this.props.postClassAction(
-    this.props.course.courseId,
-    className,
-    trainer,
-    date,
-    startedTime,
-    endedTime,
-    buildingId,
-    roomId,
+      this.props.course.courseId,
+      className,
+      trainer,
+      date,
+      startedTime,
+      endedTime,
+      buildingId,
+      roomId,
     );
   }
 
@@ -191,7 +203,7 @@ export default class changeBHScreen extends Component {
             text: 'OK',
             onPress: () => {
               this.props.getClassByCourseAction(this.props.course.courseId);
-              this.props.navigation.goBack()            
+              this.props.navigation.goBack();
             },
           },
         ]);
@@ -291,22 +303,15 @@ export default class changeBHScreen extends Component {
                 error={this.state.timeFromError}
               />
               <TimePickerButton
-                //defaultItem={this.state.timeFrom}
-                //minimumTime={new Time(this.state.timeFrom)}
                 borderColor={!this.state.timeFromError ? '#ff0000' : '#000'}
                 placeHolder="Chọn giờ bắt đầu"
                 onChange={(value) => {
-                  this.setState({
-                    timeFrom:
-                      value.split('/').reverse().join('-').toString(),
-                    timeFromError: true,
-                  });
+                  this.setState({timeFrom: value, timeFromError: true});
                   {
-                    let from = new Date(this.state.timeFrom);
-                    let to = new Date(this.state.timeTo);
+                    let from = Date.parse('01/01/2007 ' + this.state.timeFrom);
+                    let to = Date.parse('01/01/2007 ' + this.state.timeTo);
                     if (from > to) {
-                      console.log('clear');
-                      this.setState({timeTo: ''});
+                      this.setState({timeTo: '', timeFromToError: true});
                       this.resetTime.current.resetTime();
                     }
                   }
@@ -324,18 +329,26 @@ export default class changeBHScreen extends Component {
                 ref={this.resetTime}
                 defaultItem={this.state.timeTo}
                 borderColor={!this.state.timeToError ? '#ff0000' : '#000'}
-                //minimumTime={new Time(this.state.timeFrom)}
+                minimumTime={new Date(this.state.timeFrom)}
                 placeHolder="Chọn giờ kết thúc"
-                onChange={(value) =>
-                  this.setState({
-                    timeTo:
-                      value.split('/').reverse().join('-').toString(),
-                    timeToError: true,
-                  })
-                }
+                onChange={(value) => {
+                  this.setState({timeTo: value, timeToError: true});
+                  {
+                    let from = Date.parse('01/01/2007 ' + this.state.timeFrom);
+                    let to = Date.parse('01/01/2007 ' + this.state.timeTo);
+                    if (from > to) {
+                      this.setState({timeFromToError: false});
+                    } else {
+                      this.setState({timeFromToError: true});
+                    }
+                  }
+                }}
               />
             </View>
           </View>
+          {/* <View style={{paddingHorizontal:"2%"}}>
+                        <Text style={{paddingLeft:"2%",fontSize:Sizes.h32,fontWeight:"bold",color:"red",fontStyle:"italic"}}>{this.state.timeFromToError===false?"Giờ bắt đầu không được sảy ra sau giờ kết thúc":null}</Text>
+                    </View> */}
           <View style={{flex: 2, padding: 5}}>
             <View style={{flex: 2}}>
               <Title title="Tòa nhà" error={this.state.selectedBuildingError} />
@@ -403,9 +416,8 @@ export default class changeBHScreen extends Component {
                   borderColor: !this.state.selectedRoomError
                     ? '#ff0000'
                     : '#000',
-                    color: '#000',
-                    backgroundColor: this.state.room == null ? '#afafaf' : '#fff',
-
+                  color: '#000',
+                  backgroundColor: this.state.room == null ? '#afafaf' : '#fff',
                 }}
                 placeholder={
                   this.state.selectedRoomName == ''
@@ -417,7 +429,7 @@ export default class changeBHScreen extends Component {
                   this.setState({
                     selectedRoom: item.key,
                     selectedRoomName: item.value,
-                    selectedRoomError:true,
+                    selectedRoomError: true,
                   });
                 }}
               />

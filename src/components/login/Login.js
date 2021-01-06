@@ -22,13 +22,16 @@ export default class Login extends React.Component {
       passWord: '',
       remember: false,
       openEye: false,
+      ischeck: false,
+      isshow: true,
+      isLogin: false,
     };
   }
 
   async componentWillUnmount() {
     const value = await AsyncStorage.getItem('dataUser');
     console.log('dataUser', value);
-
+git
     if (value !== null) {
       const data = JSON.parse(value);
       data.isLogin = true;
@@ -49,8 +52,8 @@ export default class Login extends React.Component {
   }
 
   onPressLogin = () => {
+    this.props.navigation.pop();
     this.props.navigation.navigate('LoginContainer');
-    //return;
     // so sanh gia tri dang nhap
     console.log('zzzz');
     if (
@@ -117,8 +120,7 @@ export default class Login extends React.Component {
   onChangeTextPass = (text) => {
     this.setState({passWord: text});
   };
-
-  onPress = () => {
+  onPressRemember = () => {
     this.setState({remember: !this.state.remember});
   };
 
@@ -128,8 +130,8 @@ export default class Login extends React.Component {
 
   render() {
     return (
-        <SafeAreaView style={styles.allView}>
-          <ScrollView  contentContainerStyle={{flexGrow:1}}>
+      <SafeAreaView style={styles.allView}>
+        <ScrollView contentContainerStyle={{flexGrow: 1}}>
           <View style={styles.container}>
             <View style={styles.header}>
               <Image
@@ -180,7 +182,7 @@ export default class Login extends React.Component {
               <View style={styles.crileCheck}>
                 <TouchableOpacity
                   style={styles.checkBox}
-                  onPress={this.onPress}>
+                  onPress={this.onPressRemember}>
                   <Icon
                     style={styles.iconBox}
                     name={this.state.remember ? 'check-circle' : 'circle'}
@@ -200,25 +202,25 @@ export default class Login extends React.Component {
                 <Image
                   style={styles.footer}
                   source={require('../../res/images/swipe.png')}
-                /> 
+                />
                 <Text style={styles.txtfooter}>
                   Copyright © 2019, FPT Information System
                 </Text>
               </View>
             </View>
           </View>
-          </ScrollView>
-        </SafeAreaView>
+        </ScrollView>
+      </SafeAreaView>
     );
   }
 }
 
 var styles = StyleSheet.create({
-  allView:{
-    flex:1,
+  allView: {
+    flex: 1,
   },
   container: {
-    flex:1,
+    flex: 1,
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
@@ -228,7 +230,7 @@ var styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop:20
+    paddingTop: 20,
     //backgroundColor:'red'
   },
   logo: {
@@ -272,16 +274,16 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     height: 150,
     width: 260,
-    paddingBottom:50,
-    marginBottom: 50
+    paddingBottom: 50,
+    marginBottom: 50,
   },
   sectionUser: {
     //flex: 1,
-    width:300,
+    width: 300,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginLeft:15
+    marginLeft: 15,
   },
   iconUser: {
     padding: 10,
@@ -308,11 +310,11 @@ var styles = StyleSheet.create({
   },
   sectionPass: {
     //flex: 1,
-    width:300,
+    width: 300,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginLeft:15
+    marginLeft: 15,
   },
   iconPass: {
     padding: 10,
@@ -342,8 +344,8 @@ var styles = StyleSheet.create({
     backgroundColor: '#FF9335',
     padding: 5,
     borderRadius: 5,
-    width:300,
-    marginLeft:15
+    width: 300,
+    marginLeft: 15,
   },
   bnlogin: {
     color: '#FFFCEA',
@@ -351,9 +353,8 @@ var styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   txtfooter: {
-
     textAlign: 'center',
-    paddingTop:50,
+    paddingTop: 50,
     color: '#B0B7C1',
   },
   checkBox: {
@@ -375,6 +376,6 @@ var styles = StyleSheet.create({
   crileCheck: {
     flexDirection: 'row',
     //marginBottom: 3
-    marginLeft:15
+    marginLeft: 15,
   },
 });

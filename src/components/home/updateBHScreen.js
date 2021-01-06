@@ -45,6 +45,7 @@ export default class updateBHScreen extends Component {
       dateError: true,
       timeFromError: true,
       timeToError: true,
+      timeFromToError:true,
     };
     this.resetTime = React.createRef();
   }
@@ -69,23 +70,23 @@ export default class updateBHScreen extends Component {
     console.log(a.className);
   }
 
-  kiemtraTimeFrom(){
+  kiemtraTimeFrom() {
     if (this.state.timeFrom == '') {
-      this.setState({timeFromError:false});
+      this.setState({timeFromError: false});
       return false;
-    }else{
-      this.setState({timeFromError:true});
+    } else {
+      this.setState({timeFromError: true});
       return true;
     }
   }
 
-  kiemtraTimeTo(){
+  kiemtraTimeTo() {
     console.log(this.state.timeTo);
-    if(this.state.timeTo == '') {
+    if (this.state.timeTo == '') {
       this.setState({timeToError: false});
       return false;
-    }else{
-      this.setState({timeToError:true});
+    } else {
+      this.setState({timeToError: true});
       return true;
     }
   }
@@ -140,40 +141,18 @@ export default class updateBHScreen extends Component {
   }
 
   updateLopHoc() {
-    if(
-      !this.kiemTraLop()|
-      !this.kiemTraGiangVien()|
-      !this.kiemTraDate()|
-      !this.kiemtraTimeFrom()|
-      !this.kiemtraTimeTo()|
-      !this.KiemTraToaNha()|
+    if (
+      !this.kiemTraLop() |
+      !this.kiemTraGiangVien() |
+      !this.kiemTraDate() |
+      !this.kiemtraTimeFrom() |
+      !this.kiemtraTimeTo() |
+      !this.KiemTraToaNha() |
       !this.kiemTraPhongHoc()
     ) {
       return;
     }
-    // this.props.updateClassAction(
-    //   this.state.id,
-    //   console.log('ID ne',this.state.id),
-    //   this.state.tenLopHoc,
-    //   console.log('tên lớp',this.state.tenLopHoc),
-    //   this.state.giangVien,
-    //   console.log('tên giảng viên',this.state.giangVien),
-    //   this.state.date,
-    //   console.log('ngày',this.state.date),
-    //   this.state.timeFrom,
-    //   console.log('giờ bđ',this.state.timeFrom),
-    //   this.state.timeTo,
-    //   console.log('giờ kt',this.state.timeTo),
-    //   this.state.selectedBuilding,
-    //   console.log('id tòa nhà',this.state.selectedBuilding,),
-    //   this.state.selectedBuildingName,
-    //   console.log('ten toa nha',this.state.selectedBuildingName),
-    //   this.state.selectedRoom,
-    //   console.log('id phòng',this.state.selectedRoom,),
-    //   this.state.selectedRoomName,
-    //   console.log('ten phong',this.state.selectedRoomName),
 
-    // );
     this.props.updateClassAction(
       this.state.id,
       this.state.tenLopHoc,
@@ -186,54 +165,55 @@ export default class updateBHScreen extends Component {
     );
   }
 
-async componentDidUpdate(prevProps){
-  if (prevProps.building != this.props.building) {
-    if(!objectIsNull(this.props.building)){
-      if(!arrayIsEmpty(this.props.building.data)){
-        var convertArray = this.props.building.data.map(function(obj){
-          return{
-            key: obj._id,
-            label: obj.buildingName,
-            value: obj.buildingName,
-          };
-        });
-        await this.setState({building: convertArray});
-        for(let i = 0; i < this.state.building.length; i++){
-          if(this.state.selectedBuilding === this.state.building[i].key){
-            let convertArray = this.props.building.data[i].room.map(function(
-              obj,
-            ){
-              return {key: obj._id, label: obj.roomName, value: obj.roomName};
-            });
-            this.setState({
-              room:convertArray,
-            });
-            break;
+  async componentDidUpdate(prevProps) {
+    if (prevProps.building != this.props.building) {
+      if (!objectIsNull(this.props.building)) {
+        if (!arrayIsEmpty(this.props.building.data)) {
+          var convertArray = this.props.building.data.map(function (obj) {
+            return {
+              key: obj._id,
+              label: obj.buildingName,
+              value: obj.buildingName,
+            };
+          });
+          await this.setState({building: convertArray});
+          for (let i = 0; i < this.state.building.length; i++) {
+            if (this.state.selectedBuilding === this.state.building[i].key) {
+              let convertArray = this.props.building.data[i].room.map(function (
+                obj,
+              ) {
+                return {key: obj._id, label: obj.roomName, value: obj.roomName};
+              });
+              this.setState({
+                room: convertArray,
+              });
+              break;
+            }
           }
         }
       }
     }
-  }
 
-  if (prevProps.updateClass != this.props.updateClass){
-    console.log('updateClass zzzz:', this.props.updateClass);
-    if(this.props.updateClass.data.result.resultCode === -1){
-      console.log('lỗi', this.props.updateClass.data.result.message);
-      Alert.alert('lỗi', this.props.updateClass.data.result.message);
+    if (prevProps.updateClass != this.props.updateClass) {
+      console.log('updateClass zzzz:', this.props.updateClass);
+      if (this.props.updateClass.data.result.resultCode === -1) {
+        console.log('lỗi', this.props.updateClass.data.result.message);
+        Alert.alert('lỗi', this.props.updateClass.data.result.message);
+      } else if (this.props.updateClass.data.result.resultCode === 1) {
+        Alert.alert('Thông báo', this.props.updateClass.data.result.message, [
+          {
+            text: 'OK',
+            onPress: async () => {
+              await this.props.getClassByCourseAction(
+                this.props.course.courseId,
+              );
+              this.props.navigation.goBack();
+            },
+          },
+        ]);
+      }
     }
-    else if(this.props.updateClass.data.result.resultCode === 1){
-      Alert.alert('Thông báo', this.props.updateClass.data.result.message,[
-        {
-          text :'OK',
-          onPress:async()=>{
-            await this.props.getClassByCourseAction(this.props.course.courseId);
-            this.props.navigation.goBack()
-          }
-        }
-      ])
-    }
-  }  
-}
+  }
 
   render() {
     return (
@@ -323,25 +303,25 @@ async componentDidUpdate(prevProps){
             ]}>
             <View style={{flex: 3}}>
               <Title
-                Style={{marginHorizontal: '2%',}}
+                Style={{marginHorizontal: '2%'}}
                 title="Giờ bắt đầu"
                 error={this.state.timeFromError}
               />
               <TimePickerButton
-                defaultItem={this.state.timeFrom}
                 borderColor={!this.state.timeFromError ? '#ff0000' : '#000'}
-                placeHolder={this.state.timeFrom}
+                placeHolder={
+                  this.state.timeFrom == ''
+                    ? 'Chọn bắt đầu'
+                    : this.state.timeFrom
+                }
+                defaultItem={this.state.timeFrom}
                 onChange={(value) => {
-                  this.setState({
-                    timeFrom: value.split('/').reverse().join('-').toString(),
-                    timeFromError: true,
-                  });
+                  this.setState({timeFrom: value, timeFromError: true});
                   {
-                    let from = new Date(this.state.timeFrom);
-                    let to = new Date(this.state.timeTo);
+                    let from = Date.parse('01/01/2007 ' + this.state.timeFrom);
+                    let to = Date.parse('01/01/2007 ' + this.state.timeTo);
                     if (from > to) {
-                      console.log('clear');
-                      this.setState({timeTo: ''});
+                      this.setState({timeTo: '', timeFromToError: true});
                       this.resetTime.current.resetTime();
                     }
                   }
@@ -357,19 +337,32 @@ async componentDidUpdate(prevProps){
               />
               <TimePickerButton
                 ref={this.resetTime}
-                defaultItem={this.state.timeTo}
+                disable={this.state.dateFrom == '' ? true : false}
+                minimumDate={new Date(this.state.timeFrom)}
                 borderColor={!this.state.timeToError ? '#ff0000' : '#000'}
-                //minimumTime={new Time(this.state.timeFrom)}
-                placeHolder={this.state.timeTo}
-                onChange={(value) =>
-                  this.setState({
-                    timeTo: value.split('/').reverse().join('-').toString(),
-                    timeToError: true,
-                  })
+                placeHolder={
+                  this.state.timeTo == ''
+                    ? 'Chọn giờ kết thúc'
+                    : this.state.timeTo
                 }
+                onChange={(value) => {
+                  this.setState({timeTo: value, timeToError: true});
+                  {
+                    let from = Date.parse('01/01/2007 ' + this.state.timeFrom);
+                    let to = Date.parse('01/01/2007 ' + this.state.timeTo);
+                    if (from > to) {
+                      this.setState({timeFromToError: false});
+                    } else {
+                      this.setState({timeFromToError: true});
+                    }
+                  }
+                }}
               />
             </View>
           </View>
+          <View style={{paddingHorizontal:"2%"}}>
+                        <Text style={{paddingLeft:"2%",fontSize:Sizes.h32,fontWeight:"bold",color:"red",fontStyle:"italic"}}>{this.state.timeFromToError===false?"Giờ bắt đầu không được sảy ra sau giờ kết thúc":null}</Text>
+                    </View>
           <View style={{flex: 2, padding: 5}}>
             <View style={{flex: 2}}>
               <Title title="Tòa nhà" error={this.state.selectedBuildingError} />
