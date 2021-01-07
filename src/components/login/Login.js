@@ -22,7 +22,6 @@ export default class Login extends React.Component {
       passWord: '',
       remember: false,
       openEye: false,
-      ischeck: false,
       isshow: true,
       isLogin: false,
     };
@@ -41,7 +40,7 @@ git
 
   componentDidUpdate(prevProps) {
     if ((this.props.data !== null) & (this.props.data !== prevProps.data)) {
-      this.props.navigation.navigate('Home');
+      this.props.navigation.replace('Home');
     }
     if ((this.props.error !== null) & (this.props.error !== prevProps.error)) {
       Snackbar.show({
@@ -52,10 +51,10 @@ git
   }
 
   onPressLogin = () => {
-    this.props.navigation.pop();
-    this.props.navigation.navigate('LoginContainer');
-    // so sanh gia tri dang nhap
-    console.log('zzzz');
+    // this.props.navigation.pop();
+    // this.props.navigation.navigate('LoginContainer');
+    // // so sanh gia tri dang nhap
+    // console.log('zzzz');
     if (
       (this.state.userName.trim() === '') |
       (this.state.passWord.trim() === '')
@@ -85,15 +84,10 @@ git
         const data = JSON.parse(value);
 
         await this.setState({
-          username: data.userName,
-          isCheck: data.isCheck,
-          isLogin: data.isCheck,
+          userName: data.userName,
+          remember: data.remember,
+          isLogin: data.remember,
         });
-
-        if (data.isLogin) {
-          if (data.passWord !== '')
-            this.props.loginAction(data.userName, data.passWord);
-        }
       }
     } catch (e) {
       console.log(e);
@@ -104,8 +98,8 @@ git
     try {
       AsyncStorage.clear();
       console.log('có', data);
-      if (this.state.isCheck) {
-        await this.setState(data);
+      if (this.state.remember) {
+       // await this.setState(data);
         await AsyncStorage.setItem('dataUser', JSON.stringify(data));
       }
     } catch (error) {

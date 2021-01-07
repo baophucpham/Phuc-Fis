@@ -169,8 +169,8 @@ export default class Home extends React.Component {
         {
           text: 'OK',
           onPress: () => {
-            this.props.navigation.pop()
-            this.props.navigation.navigate('Login');
+            //this.props.navigation.pop()
+            this.props.navigation.replace('LoginContainer');
           },
         },
       ],
