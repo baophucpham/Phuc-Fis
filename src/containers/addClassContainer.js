@@ -19,7 +19,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
   getBuildingRoomAction: () => dispatch(getBuildingRoomAction()),
   getClassByCourseAction: (id) => dispatch(getClassByCourseAction(id)),
-  sendCoruseAction:()=>dispatch(sendCoruseAction(courseId)),
+  sendCoruseAction:()=>dispatch(sendCoruseAction(courseId,startedDate,endedDate)),
   postClassAction: (
     courseId,
     className,

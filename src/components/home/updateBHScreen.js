@@ -45,7 +45,7 @@ export default class updateBHScreen extends Component {
       dateError: true,
       timeFromError: true,
       timeToError: true,
-      timeFromToError:true,
+      timeFromToError: true,
     };
     this.resetTime = React.createRef();
   }
@@ -90,6 +90,19 @@ export default class updateBHScreen extends Component {
       return true;
     }
   }
+
+  checkFromToTime(from,to){
+    var from = new Date(from);
+    var to = new Date(to);
+    if(from > to){
+        this.setState({timeFromError:false});
+        this.setState({timeToError:false});
+        return false;
+    }
+    return true;
+}
+
+
   kiemTraDate() {
     console.log(this.state.date);
     if (this.state.date == '') {
@@ -148,7 +161,8 @@ export default class updateBHScreen extends Component {
       !this.kiemtraTimeFrom() |
       !this.kiemtraTimeTo() |
       !this.KiemTraToaNha() |
-      !this.kiemTraPhongHoc()
+      !this.kiemTraPhongHoc()|
+      (this.state.timeFromToError===false)
     ) {
       return;
     }
@@ -284,6 +298,8 @@ export default class updateBHScreen extends Component {
             <DateTimePickerButton
               borderColor={!this.state.dateError ? '#ff0000' : '#000'}
               defaultItem={this.state.date}
+              maximumDate={new Date(this.props.course.endedDate)}
+              minimumDate={new Date(this.props.course.startedDate)}
               placeHolder={moment(this.state.date).format('DD/MM/YYYY')}
               onChange={(value) => {
                 this.setState({
@@ -360,9 +376,20 @@ export default class updateBHScreen extends Component {
               />
             </View>
           </View>
-          <View style={{paddingHorizontal:"2%"}}>
-                        <Text style={{paddingLeft:"2%",fontSize:Sizes.h32,fontWeight:"bold",color:"red",fontStyle:"italic"}}>{this.state.timeFromToError===false?"Giờ bắt đầu không được sảy ra sau giờ kết thúc":null}</Text>
-                    </View>
+          <View style={{paddingHorizontal: '2%'}}>
+            <Text
+              style={{
+                paddingLeft: '2%',
+                fontSize: Sizes.h32,
+                fontWeight: 'bold',
+                color: 'red',
+                fontStyle: 'italic',
+              }}>
+              {this.state.timeFromToError === false
+                ? 'Giờ bắt đầu không được sảy ra sau giờ kết thúc'
+                : null}
+            </Text>
+          </View>
           <View style={{flex: 2, padding: 5}}>
             <View style={{flex: 2}}>
               <Title title="Tòa nhà" error={this.state.selectedBuildingError} />

@@ -42,7 +42,7 @@ const mapDispatchToProps = (dispatch) => {
         ),
       ),
     getClassByCourseAction: (classId) => dispatch(getClassByCourseAction(classId)),
-    sendCoruseAction:()=>dispatch(sendCoruseAction(courseId))
+    sendCoruseAction:()=>dispatch(sendCoruseAction(courseId,startedDate,endedDate))
   };
 };
 class UpdateClassContainer extends Component {

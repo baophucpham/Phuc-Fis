@@ -81,10 +81,10 @@ export const updateCourseAction = (token, courseOj) => {
     }
 }
 
-export const sendCourseAction =(courseId)=>{
+export const sendCourseAction =(courseId,startedDate,endedDate)=>{
     return{
         type: SEND_COURSE,
-        data: {courseId}
+        data: {courseId,startedDate,endedDate}
     }
 }
 

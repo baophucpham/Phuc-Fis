@@ -251,8 +251,7 @@ export default class QlBHScreen extends Component {
                       <View style={styles.info}>
                         <Text style={styles.infoText}>Ngày: </Text>
                         <Text style={[styles.infoText2, {color: '#3A4C5E'}]}>
-                          {moment(item.date).format('DD/MM/YYYY')} -{' '}
-                          {moment(item.last_modified).format('DD/MM/YYYY')}
+                          {moment(item.date).format('DD/MM/YYYY')}
                         </Text>
                       </View>
                     </View>

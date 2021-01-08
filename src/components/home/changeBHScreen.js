@@ -161,7 +161,8 @@ export default class changeBHScreen extends Component {
       !this.kiemTraDate() |
       !this.kiemTratimeFrom() |
       !this.kiemTraTimeTo() |
-      !this.KiemTraToaNha()
+      !this.KiemTraToaNha()|
+      (this.state.timeFromToError===false)
     ) {
       return;
     }
@@ -280,6 +281,8 @@ export default class changeBHScreen extends Component {
             <DateTimePickerButton
               borderColor={!this.state.dateError ? '#ff0000' : '#000'}
               placeHolder="Chọn ngày"
+              maximumDate={new Date(this.props.course.endedDate)}
+              minimumDate={new Date(this.props.course.startedDate)}
               onChange={(value) => {
                 this.setState({
                   date:
@@ -346,9 +349,20 @@ export default class changeBHScreen extends Component {
               />
             </View>
           </View>
-          {/* <View style={{paddingHorizontal:"2%"}}>
-                        <Text style={{paddingLeft:"2%",fontSize:Sizes.h32,fontWeight:"bold",color:"red",fontStyle:"italic"}}>{this.state.timeFromToError===false?"Giờ bắt đầu không được sảy ra sau giờ kết thúc":null}</Text>
-                    </View> */}
+          <View style={{paddingHorizontal: '2%'}}>
+            <Text
+              style={{
+                paddingLeft: '2%',
+                fontSize: Sizes.h32,
+                fontWeight: 'bold',
+                color: 'red',
+                fontStyle: 'italic',
+              }}>
+              {this.state.timeFromToError === false
+                ? 'Giờ bắt đầu không được sảy ra sau giờ kết thúc'
+                : null}
+            </Text>
+          </View>
           <View style={{flex: 2, padding: 5}}>
             <View style={{flex: 2}}>
               <Title title="Tòa nhà" error={this.state.selectedBuildingError} />

@@ -55,6 +55,7 @@ export default class DateTimePickerButton extends Component {
                   testID="dateTimePicker"
                   value={this.state.date}
                   minimumDate={this.props.minimumDate}
+                  maximumDate={this.props.maximumDate}
                   mode='countdown'
                   display="default"
                   onChange={this.handleOnChange}

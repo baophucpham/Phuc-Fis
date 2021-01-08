@@ -55,6 +55,7 @@ export default class TimePickerButton extends Component {
                   testID="TimePicker"
                   value={this.state.time}
                   minimumTime={this.props.minimumTime}
+                  maximumTime={this.props.maximumTime}
                   mode='time'
                   display="clock"
                   onChange={this.handleOnChange}

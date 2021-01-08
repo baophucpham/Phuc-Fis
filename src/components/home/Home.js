@@ -211,7 +211,7 @@ export default class Home extends React.Component {
                 
                   <TouchableOpacity
                     onPress={() =>
-                      {this.props.sendCourseAction(item.course_id),
+                      {this.props.sendCourseAction(item.course_id,item.startedDate,item.endedDate),
                       this.props.navigation.navigate('QlBHScreen', {data: item})}
                     }>
                     <View style={styles.viewFlatlist}>
